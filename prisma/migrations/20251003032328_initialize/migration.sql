@@ -1,4 +1,4 @@
--- CreateTable
+-- This is an empty migration.-- CreateTable
 CREATE TABLE "Insights" (
     "documentId" TEXT NOT NULL PRIMARY KEY,
     "summary" TEXT NOT NULL,

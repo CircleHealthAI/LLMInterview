@@ -90,8 +90,8 @@ npm run db:studio      # Database GUI
 **Task:** Store insights in database and sort documents by needsEditing status.
 
 **Steps:**
-1. **Uncomment migration** in `prisma/migrations/20240102000000_add_additional_columns/migration.sql`
-2. **Run migration:** `npm run db:push`
+1. **Updaet the schema** in `prisma/schema.prisma`
+2. **Generate and run the migration** `npm db:migrate`
 3. **Update store-insights API** to save sentiment and needsEditing fields
 4. **Update get-all-insights API** to return all insight fields
 5. **Implement sorting** to show documents needing editing first

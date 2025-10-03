@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { Document } from '@/lib/document'
 import { InsightsResponse } from '@/app/api/insights/route'
 import { getDocumentById } from '@/lib/documentStorage'

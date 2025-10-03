@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { Document } from '@/lib/document'
 import { InsightsResponse } from '@/app/api/insights/route'
 import { getDocumentById } from '@/lib/documentStorage'
@@ -158,7 +157,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
         )}
         {/* TODO: Add insights display */}
         <div className="prose max-w-none">
-          {JSON.stringify(insights)}
+          {JSON.stringify(document.content)}
         </div>
       </div>
     </div>

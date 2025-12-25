@@ -75,7 +75,7 @@ npm run db:studio      # Database GUI
 
 **Requirements:**
 - Call Ollama API with document text using local model
-- Extract and return: summary, sentiment, needsEditing
+- Extract and return: summary, comprehensionScore, isNonFiction
 - Update the Document page to display the document alongside the AI generated insights. Use your judgement to make the UI useful and usable. Feel free to add whatever styling library you would like to use.
 
 **Local API:** Uses Ollama running on `http://localhost:11434`
@@ -91,13 +91,13 @@ const response = await ollama.chat({
 });
 ```
 
-### **Part 2: Store and Sort Documents by Needs Editing**
-**Locations:** 
+### **Part 2: Store and Sort Documents by Comprehension Score**
+**Locations:**
 - Database schema: `prisma/schema.prisma`
 - Store API: `app/api/store-insights/route.ts`
 - Retrieve API: `app/api/get-all-insights/route.ts`
 
-**Task:** Store insights in database and sort documents by needsEditing status.
+**Task:** Store insights in database and sort documents by comprehension score.
 
 **Steps:**
 1. **Update the schema** in `prisma/schema.prisma`
@@ -111,9 +111,9 @@ model Insights {
 }
 ```
 2. **Generate and run the migration** `npm run db:migrate`
-3. **Update store-insights API** to store all generated insights (summary, sentiment, needsEditing). This API should be called after insights are generated in Part 1.
+3. **Update store-insights API** to store all generated insights (summary, comprehensionScore, isNonFiction). This API should be called after insights are generated in Part 1.
 4. **Update get-all-insights API** to return all insight fields
-5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents needing editing first
+5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents with lower comprehension scores first (documents that need better explanations)
 
 ### **Part 3: Architecture**
 How would you make this a production system?
@@ -122,11 +122,11 @@ How would you make this a production system?
 
 ## What's Implemented
 
-✅ File upload (.txt, .docx)  
-✅ Document parsing and storage  
-✅ Database with Prisma/SQLite  
-✅ Basic UI and routing  
-✅ 10 sample documents  
+✅ File upload (.txt, .docx)
+✅ Document parsing and storage
+✅ Database with Prisma/SQLite
+✅ Basic UI and routing
+✅ 11 sample documents (10 non-fiction, 1 fiction)
 ✅ Ollama integration setup
 
 ❌ Ollama API implementation (Part 1)  

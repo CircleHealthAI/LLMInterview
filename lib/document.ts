@@ -187,6 +187,36 @@ The future of e-commerce includes voice commerce, Internet of Things integration
 
 Privacy regulations like GDPR and CCPA are reshaping how e-commerce companies collect and use customer data. First-party data strategies and privacy-first marketing approaches are becoming essential for sustainable growth.`,
     createdAt: "2024-01-24T17:40:00Z"
+  },
+  {
+    id: "doc-11",
+    title: "The Day the Donut Took Over",
+    content: `It started like any other Tuesday morning at Sugarville Bakery. The fluorescent lights hummed, the ovens warmed, and Martha began mixing the day's first batch of glazed donuts. But this Tuesday was different. This was the day everything changed.
+
+The donut emerged from the fryer at exactly 6:47 AM, its golden ring glistening with an otherworldly sheen. Martha reached for the cooling rack, but the donut—let's call him Duke—had other plans. With a sudden burst of consciousness that defied all known laws of pastry physics, Duke rolled off the counter and onto the bakery floor.
+
+"Did that donut just... move?" Martha whispered to herself, adjusting her glasses.
+
+Duke didn't just move. Duke had ambition. As he rolled through the backdoor and into the morning streets of Sugarville, he began to formulate his plan for world domination. First, he would unite the bakeries. Then, the grocery stores. Finally, the world would bow before the Glazed Empire.
+
+By noon, Duke had recruited an army of cronuts, bear claws, and apple fritters. The pastries marched through Main Street, their sugary surfaces glinting in the sunlight. Mayor Thompson stood on the steps of City Hall, bewildered as a battalion of baked goods surrounded the building.
+
+"What are your demands?" the mayor shouted at Duke, who had positioned himself at the front of the pastry platoon.
+
+Duke rolled forward, leaving a faint trail of glaze on the concrete. Through some inexplicable form of telepathic communication, his message was clear: "Free sprinkles for all. Mandatory morning coffee breaks. And most importantly, humans must stop calling us 'just empty calories.'"
+
+The media arrived within hours. News helicopters circled overhead as reporters interviewed eyewitnesses. "I've never seen anything like it," said one witness. "The donut had this look in his... well, he doesn't have eyes, but you could just feel his determination."
+
+By evening, Duke's revolution had spread to neighboring cities. Bagels joined the cause in Brooklyn. Croissants surrendered immediately in Paris, claiming they'd been waiting for someone to lead them. Even the notoriously independent sourdough loaves of San Francisco pledged their allegiance.
+
+The President convened an emergency meeting of the Joint Chiefs of Staff. "We're facing an unprecedented threat," General Harrison explained, pointing to a map covered in donut-shaped markers. "They've taken control of every Dunkin' and Krispy Kreme in the nation. Our strategic donut reserves are compromised."
+
+But Duke wasn't interested in conflict. He was interested in recognition. After three days of tense negotiations, the Treaty of the Bakery was signed. Humans agreed to appreciate baked goods as the complex, culturally significant items they truly were. In exchange, Duke and his pastry coalition agreed to return to their displays and cooling racks.
+
+Today, if you visit Sugarville Bakery, you'll find a small plaque near the donut case. It reads: "Here stood Duke, the donut that dared to dream." Martha still works there, and she swears that sometimes, late at night when she's closing up, she can see the donuts arranging themselves into formation.
+
+The world learned an important lesson that Tuesday: never underestimate the ambition of a perfectly glazed donut. And always, always use sprinkles.`,
+    createdAt: "2024-01-25T09:15:00Z"
   }
 ];
 

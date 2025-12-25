@@ -23,23 +23,8 @@ export async function POST(request: NextRequest) {
   // Initialize Ollama client
   const ollama = new Ollama({ host: ollamaHost });
 
-  const _ = await ollama.chat({
-    model: ollamaModel,
-    messages: [
-      // {
-      //   role: 'system',
-      //   content: 'You are an AI assistant that analyzes documents. Respond with valid JSON only.'
-      // },
-      // {
-      //   role: 'user',
-      //   content: `Analyze this document, Document: ${text}`
-      // }
-    ]
-  });
-
-  // return NextResponse.json({
-  //  ... data
-  // })
+  // TODO: Implement the Ollama API call here
+  // See README for hints on the API structure
 
   return NextResponse.json({
     error: "Not implemented",

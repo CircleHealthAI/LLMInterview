@@ -46,7 +46,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
     setError(null)
     
     try {
-      // TODO: This will call the OpenAI API once the candidate implements it
+      // TODO: This will call the Ollama API once you implement it
       const response = await fetch('/api/insights', {
         method: 'POST',
         headers: {

@@ -81,6 +81,17 @@ npm run db:studio      # Database GUI
 }
 ```
 
+**Hint:** Example Ollama API call structure:
+```typescript
+const ollama = new Ollama({ host: ollamaHost });
+const response = await ollama.chat({
+  model: ollamaModel,
+  messages: [
+    { role: 'user', content: `Analyze: ${text}` }
+  ]
+});
+```
+
 ### **Part 2: Store and Sort Documents by Needs Editing**
 **Locations:** 
 - Database schema: `prisma/schema.prisma`
@@ -97,10 +108,10 @@ model Insights {
   summary    String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  randomField String
+  yourFieldHere String
 }
 ```
-2. **Generate and run the migration** `npm db:migrate`
+2. **Generate and run the migration** `npm run db:migrate`
 3. **Update store-insights API** to save sentiment and needsEditing fields
 4. **Update get-all-insights API** to return all insight fields
 5. **Implement sorting** to show documents needing editing first
@@ -136,6 +147,6 @@ How would you make this a production system?
 
 
 ## For Candidates Who Can't Run Ollama
-Interviewer: 
+Interviewer:
 1. ngrok http http://localhost:11434
-2. Give candidate 
+2. Give candidate ngrok endpoint and set OLLAMA_HOST=ngrok_url in the .env file

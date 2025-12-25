@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { sampleDocuments, Document } from '@/lib/document'
-import { InsightsResponse } from '@/app/api/insights/route'
 import { parseDocumentFile, generateDocumentId, saveDocument, getAllDocuments } from '@/lib/documentStorage'
 import Link from 'next/link'
 

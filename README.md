@@ -29,7 +29,7 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
      ```
      DATABASE_URL="file:./dev.db"
      OLLAMA_HOST=http://localhost:11434
-     OLLAMA_MODEL=llama3.2
+     OLLAMA_MODEL=llama3.2:1b
      ```
 
 ## Running the Project
@@ -39,12 +39,18 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
    ollama serve
    ```
 
-2. **Start the development server** (in another terminal)  
+2. **Initialize the database** (first time only)
+   ```bash
+   npm run db:generate
+   ```
+   Note: This will generate the Prisma client and create a `dev.db` SQLite database file in the prisma directory.
+
+3. **Start the development server** (in another terminal)
    ```bash
    npm run dev
    ```
 
-3. Navigate to [http://localhost:3000](http://localhost:3000)
+4. Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## Database Migrations
 
@@ -70,16 +76,9 @@ npm run db:studio      # Database GUI
 **Requirements:**
 - Call Ollama API with document text using local model
 - Extract and return: summary, sentiment, needsEditing
-- Display insights on document details page
+- Update the Document page to display the document alongside the AI generated insights. Use your judgement to make the UI useful and usable. Feel free to add whatever styling library you would like to use.
 
 **Local API:** Uses Ollama running on `http://localhost:11434`
-
-**Expected Response:**
-```typescript
-{
-  summary: "Summary",
-}
-```
 
 **Hint:** Example Ollama API call structure:
 ```typescript
@@ -112,12 +111,14 @@ model Insights {
 }
 ```
 2. **Generate and run the migration** `npm run db:migrate`
-3. **Update store-insights API** to save sentiment and needsEditing fields
+3. **Update store-insights API** to store all generated insights (summary, sentiment, needsEditing). This API should be called after insights are generated in Part 1.
 4. **Update get-all-insights API** to return all insight fields
-5. **Implement sorting** to show documents needing editing first
+5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents needing editing first
 
-### **Part 3: Architecture
+### **Part 3: Architecture**
 How would you make this a production system?
+
+**(Freeform discussion)**
 
 ## What's Implemented
 
@@ -140,8 +141,8 @@ How would you make this a production system?
 4. Test Ollama: `ollama list` should show your downloaded models
 
 **Recommended models:**
-- `llama3.2` (3B) - Fast and lightweight
-- `llama3.2:1b` - Even faster for testing
+- `llama3.2:1b` - Fast and lightweight (recommended)
+- `llama3.2` (3B) - Larger model with better accuracy
 - `qwen2.5:3b` - Good alternative
 
 

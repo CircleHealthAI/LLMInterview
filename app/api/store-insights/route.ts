@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const now = new Date();
 
-    await db
+    const result = await db
       .insertInto('Insights')
       .values({
         documentId,
@@ -34,12 +34,7 @@ export async function POST(request: NextRequest) {
           updatedAt: now.getTime(),
         })
       )
-      .execute();
-
-    const result = await db
-      .selectFrom('Insights')
-      .selectAll()
-      .where('documentId', '=', documentId)
+      .returningAll()
       .executeTakeFirstOrThrow();
 
     return NextResponse.json({

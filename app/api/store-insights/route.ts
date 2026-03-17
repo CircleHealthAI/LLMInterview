@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { db } from '@/db/client';
 
 export interface StoreInsightsRequest {
   documentId: string;
@@ -18,40 +18,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prepare update/create data
-    const insightData = {
-      summary
-    };
+    const now = new Date();
 
-    // Upsert the insights (create or update if exists)
-    const insights = await prisma.insights.upsert({
-      where: {
-        documentId: documentId
-      },
-      update: {
-        ...insightData,
-        updatedAt: new Date()
-      },
-      create: {
-        documentId: documentId,
-        ...insightData
-      }
-    });
+    // Upsert: insert or update on conflict
+    // Note: updatedAt must be set manually on updates — unlike Prisma's @updatedAt,
+    // Drizzle's $defaultFn only fires on insert.
+    await db
+      .insertInto('Insights')
+      .values({
+        documentId,
+        summary,
+        createdAt: now,
+        updatedAt: now,
+      })
+      .onConflict((oc) =>
+        oc.column('documentId').doUpdateSet({
+          summary,
+          updatedAt: now,
+        })
+      )
+      .execute();
+
+    const result = await db
+      .selectFrom('Insights')
+      .selectAll()
+      .where('documentId', '=', documentId)
+      .executeTakeFirstOrThrow();
 
     return NextResponse.json({
       success: true,
       insights: {
-        documentId: insights.documentId,
-        summary: insights.summary,
-        createdAt: insights.createdAt,
-        updatedAt: insights.updatedAt
+        documentId: result.documentId,
+        summary: result.summary,
+        createdAt: new Date(result.createdAt as unknown as number).toISOString(),
+        updatedAt: new Date(result.updatedAt as unknown as number).toISOString(),
       }
     });
 
   } catch (error) {
     console.error('Error storing insights:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to store insights',
         details: error instanceof Error ? error.message : 'Unknown error'
       },

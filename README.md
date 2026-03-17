@@ -27,7 +27,6 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
    - Copy `.env.example` to `.env.local`
    - Customize Ollama settings if needed:
      ```
-     DATABASE_URL="file:./dev.db"
      OLLAMA_HOST=http://localhost:11434
      OLLAMA_MODEL=llama3.2:1b
      ```
@@ -41,9 +40,9 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 
 2. **Initialize the database** (first time only)
    ```bash
-   npm run db:generate
+   npm run db:migrate
    ```
-   Note: This will generate the Prisma client and create a `dev.db` SQLite database file in the prisma directory.
+   Note: This will run Drizzle migrations and create a `dev.db` SQLite database file in the `db/` directory.
 
 3. **Start the development server** (in another terminal)
    ```bash
@@ -54,16 +53,19 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 
 ## Database Migrations
 
-**Migration files are stored in:** `prisma/migrations/`
+**Schema is defined in:** `db/schema.ts` (Drizzle ORM)
+**Query builder:** Kysely (see `db/client.ts`)
+**Migration files are stored in:** `db/migrations/`
 
 **Run migrations:**
 ```bash
-npm run db:push        # Apply schema changes
-npm run db:generate    # Generate Prisma client
+npm run db:generate    # Generate migration files from schema changes
+npm run db:migrate     # Apply migrations to the database
+npm run db:push        # Push schema changes directly (dev only)
 npm run db:studio      # Database GUI
 ```
 
-**⚠️ Important:** After updating the Prisma schema, always run `npm run db:generate` to regenerate TypeScript types. If you see type errors, restart your TypeScript language server (VS Code: Cmd/Ctrl + Shift + P → "TypeScript: Restart TS Server").
+**After updating the schema** in `db/schema.ts`, run `npm run db:generate` to create a new migration, then `npm run db:migrate` to apply it.
 
 
 ## Implementation Instructions
@@ -93,24 +95,22 @@ const response = await ollama.chat({
 
 ### **Part 2: Store and Sort Documents by Comprehension Score**
 **Locations:**
-- Database schema: `prisma/schema.prisma`
+- Database schema: `db/schema.ts`
 - Store API: `app/api/store-insights/route.ts`
 - Retrieve API: `app/api/get-all-insights/route.ts`
 
 **Task:** Store insights in database and sort documents by comprehension score.
 
 **Steps:**
-1. **Update the schema** in `prisma/schema.prisma`
-``` Sample:
-model Insights {
-  documentId String @id
-  summary    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  yourFieldHere String
-}
+1. **Update the schema** in `db/schema.ts`
+```typescript
+export const insights = sqliteTable('Insights', {
+  documentId: text('documentId').primaryKey(),
+  summary: text('summary').notNull(),
+  // add your fields here
+});
 ```
-2. **Generate and run the migration** `npm run db:migrate`
+2. **Generate and run the migration** `npm run db:generate && npm run db:migrate`
 3. **Update store-insights API** to store all generated insights (summary, comprehensionScore, isNonFiction). This API should be called after insights are generated in Part 1.
 4. **Update get-all-insights API** to return all insight fields
 5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents with lower comprehension scores first (documents that need better explanations)
@@ -124,7 +124,7 @@ How would you make this a production system?
 
 ✅ File upload (.txt, .docx)
 ✅ Document parsing and storage
-✅ Database with Prisma/SQLite
+✅ Database with Drizzle/Kysely/SQLite
 ✅ Basic UI and routing
 ✅ 11 sample documents (10 non-fiction, 1 fiction)
 ✅ Ollama integration setup

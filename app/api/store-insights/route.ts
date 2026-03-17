@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
       .values({
         documentId,
         summary,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: now.getTime(),
+        updatedAt: now.getTime(),
       })
       .onConflict((oc) =>
         oc.column('documentId').doUpdateSet({
           summary,
-          updatedAt: now,
+          updatedAt: now.getTime(),
         })
       )
       .execute();
@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
       insights: {
         documentId: result.documentId,
         summary: result.summary,
-        createdAt: new Date(result.createdAt as unknown as number).toISOString(),
-        updatedAt: new Date(result.updatedAt as unknown as number).toISOString(),
+        createdAt: new Date(result.createdAt).toISOString(),
+        updatedAt: new Date(result.updatedAt).toISOString(),
       }
     });
 

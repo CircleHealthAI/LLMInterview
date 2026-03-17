@@ -24,8 +24,8 @@ export async function GET() {
     const insights: InsightsSummary[] = allInsights.map(insight => ({
       documentId: insight.documentId,
       summary: insight.summary,
-      createdAt: new Date(insight.createdAt as unknown as number).toISOString(),
-      updatedAt: new Date(insight.updatedAt as unknown as number).toISOString(),
+      createdAt: new Date(insight.createdAt).toISOString(),
+      updatedAt: new Date(insight.updatedAt).toISOString(),
     }));
 
     const response: GetAllInsightsResponse = {
@@ -65,8 +65,8 @@ export async function POST(request: NextRequest) {
     const insights: InsightsSummary[] = filteredInsights.map(insight => ({
       documentId: insight.documentId,
       summary: insight.summary,
-      createdAt: new Date(insight.createdAt as unknown as number).toISOString(),
-      updatedAt: new Date(insight.updatedAt as unknown as number).toISOString(),
+      createdAt: new Date(insight.createdAt).toISOString(),
+      updatedAt: new Date(insight.updatedAt).toISOString(),
     }));
 
     const response: GetAllInsightsResponse = {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { db } from '@/db/client';
 
 export interface InsightsSummary {
   documentId: string;
@@ -16,23 +15,21 @@ export interface GetAllInsightsResponse {
 
 export async function GET() {
   try {
-    // Fetch all insights from the database
-    const allInsights = await prisma.insights.findMany({
-      orderBy: {
-        updatedAt: 'desc'
-      }
-    });
+    const allInsights = await db
+      .selectFrom('Insights')
+      .selectAll()
+      .orderBy('updatedAt', 'desc')
+      .execute();
 
-    // Transform the data to match our response interface
     const insights: InsightsSummary[] = allInsights.map(insight => ({
       documentId: insight.documentId,
       summary: insight.summary,
-      createdAt: insight.createdAt.toISOString(),
-      updatedAt: insight.updatedAt.toISOString()
+      createdAt: new Date(insight.createdAt as unknown as number).toISOString(),
+      updatedAt: new Date(insight.updatedAt as unknown as number).toISOString(),
     }));
 
     const response: GetAllInsightsResponse = {
-      insights: insights,
+      insights,
       count: insights.length
     };
 
@@ -41,7 +38,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching insights:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch insights',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
@@ -50,36 +47,30 @@ export async function GET() {
   }
 }
 
-// Optional: Also support POST for filtered queries in the future
 export async function POST(request: NextRequest) {
   try {
     const { documentIds } = await request.json();
 
-    let whereCondition = {};
+    let query = db
+      .selectFrom('Insights')
+      .selectAll()
+      .orderBy('updatedAt', 'desc');
+
     if (documentIds && Array.isArray(documentIds)) {
-      whereCondition = {
-        documentId: {
-          in: documentIds
-        }
-      };
+      query = query.where('documentId', 'in', documentIds);
     }
 
-    const filteredInsights = await prisma.insights.findMany({
-      where: whereCondition,
-      orderBy: {
-        updatedAt: 'desc'
-      }
-    });
+    const filteredInsights = await query.execute();
 
-    const insights: InsightsSummary[] = filteredInsights.map((insight: Prisma.InsightsGetPayload<{}>) => ({
+    const insights: InsightsSummary[] = filteredInsights.map(insight => ({
       documentId: insight.documentId,
       summary: insight.summary,
-      createdAt: insight.createdAt.toISOString(),
-      updatedAt: insight.updatedAt.toISOString()
+      createdAt: new Date(insight.createdAt as unknown as number).toISOString(),
+      updatedAt: new Date(insight.updatedAt as unknown as number).toISOString(),
     }));
 
     const response: GetAllInsightsResponse = {
-      insights: insights,
+      insights,
       count: insights.length
     };
 
@@ -88,7 +79,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching filtered insights:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch filtered insights',
         details: error instanceof Error ? error.message : 'Unknown error'
       },

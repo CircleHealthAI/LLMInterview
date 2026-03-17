@@ -4,8 +4,8 @@
   "id": "f8cf7429-73b6-4b60-bb84-8acc53974ba8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "Insights": {
-      "name": "Insights",
+    "insights": {
+      "name": "insights",
       "columns": {
         "documentId": {
           "name": "documentId",

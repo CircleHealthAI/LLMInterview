@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Ollama } from 'ollama';
 
+export interface InsightsResponse {
+  summary: string;
+  comprehensionScore: number;
+  isNonFiction: boolean;
+}
+
 export async function POST(request: NextRequest) {
   const { text } = await request.json();
 

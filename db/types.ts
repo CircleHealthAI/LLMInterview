@@ -9,7 +9,7 @@ export type NewInsight = InferInsertModel<typeof insights>;
 // by better-sqlite3. Timestamps are integers at the wire level; Drizzle's
 // mode:'timestamp' coercion only applies when querying via Drizzle ORM.
 export interface Database {
-  Insights: {
+  insights: {
     documentId: string;
     summary: string;
     createdAt: number;

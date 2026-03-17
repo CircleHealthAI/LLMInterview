@@ -16,7 +16,7 @@ export interface GetAllInsightsResponse {
 export async function GET() {
   try {
     const allInsights = await db
-      .selectFrom('Insights')
+      .selectFrom('insights')
       .selectAll()
       .orderBy('updatedAt', 'desc')
       .execute();
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const { documentIds } = await request.json();
 
     let query = db
-      .selectFrom('Insights')
+      .selectFrom('insights')
       .selectAll()
       .orderBy('updatedAt', 'desc');
 

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const now = new Date();
 
     const result = await db
-      .insertInto('Insights')
+      .insertInto('insights')
       .values({
         documentId,
         summary,

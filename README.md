@@ -104,7 +104,7 @@ const response = await ollama.chat({
 **Steps:**
 1. **Update the schema** in `db/schema.ts`
 ```typescript
-export const insights = sqliteTable('Insights', {
+export const insights = sqliteTable('insights', {
   documentId: text('documentId').primaryKey(),
   summary: text('summary').notNull(),
   // add your fields here

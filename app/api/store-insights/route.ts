@@ -20,9 +20,6 @@ export async function POST(request: NextRequest) {
 
     const now = new Date();
 
-    // Upsert: insert or update on conflict
-    // Note: updatedAt must be set manually on updates — unlike Prisma's @updatedAt,
-    // Drizzle's $defaultFn only fires on insert.
     await db
       .insertInto('Insights')
       .values({

@@ -7,12 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.34.0",
+    "@tanstack/react-query": "^5.90.21",
     "better-sqlite3": "^12.8.0",
     "drizzle-orm": "^0.45.1",
     "kysely": "^0.28.12",
@@ -20,19 +24,20 @@
     "next": "14.2.13",
     "ollama": "^0.5.17",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.31.10",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
+    "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
+    "prettier": "^3.8.1",
     "typescript": "^5"
   }
 }

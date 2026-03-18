@@ -5,17 +5,19 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 ## Setup
 
 1. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 2. **Install and setup Ollama**
+
    ```bash
    # Install Ollama (macOS)
    brew install ollama
-   
+
    # Or download from: https://ollama.com/download
-   
+
    # Start Ollama service
    OLLAMA_ORIGINS="*" OLLAMA_HOST=0.0.0.0 ollama serve
 
@@ -34,17 +36,21 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 ## Running the Project
 
 1. **Start Ollama service** (in one terminal)
+
    ```bash
    ollama serve
    ```
 
 2. **Initialize the database** (first time only)
+
    ```bash
    npm run db:migrate
    ```
+
    Note: This will run Drizzle migrations and create a `dev.db` SQLite database file in the `db/` directory.
 
 3. **Start the development server** (in another terminal)
+
    ```bash
    npm run dev
    ```
@@ -58,6 +64,7 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 **Migration files are stored in:** `db/migrations/`
 
 **Run migrations:**
+
 ```bash
 npm run db:generate    # Generate migration files from schema changes
 npm run db:migrate     # Apply migrations to the database
@@ -67,15 +74,16 @@ npm run db:studio      # Database GUI
 
 **After updating the schema** in `db/schema.ts`, run `npm run db:generate` to create a new migration, then `npm run db:migrate` to apply it.
 
-
 ## Implementation Instructions
 
 ### **Part 1: Request Insights from Ollama**
+
 **Location:** `app/api/insights/route.ts`
 
 **Task:** Implement Ollama API integration to generate document insights and display them.
 
 **Requirements:**
+
 - Call Ollama API with document text using local model
 - Extract and return: summary, comprehensionScore, isNonFiction
 - Update the Document page to display the document alongside the AI generated insights. Use your judgement to make the UI useful and usable. Feel free to add whatever styling library you would like to use.
@@ -83,18 +91,19 @@ npm run db:studio      # Database GUI
 **Local API:** Uses Ollama running on `http://localhost:11434`
 
 **Hint:** Example Ollama API call structure:
+
 ```typescript
-const ollama = new Ollama({ host: ollamaHost });
+const ollama = new Ollama({ host: ollamaHost })
 const response = await ollama.chat({
   model: ollamaModel,
-  messages: [
-    { role: 'user', content: `Analyze: ${text}` }
-  ]
-});
+  messages: [{ role: 'user', content: `Analyze: ${text}` }],
+})
 ```
 
 ### **Part 2: Store and Sort Documents by Comprehension Score**
+
 **Locations:**
+
 - Database schema: `db/schema.ts`
 - Store API: `app/api/store-insights/route.ts`
 - Retrieve API: `app/api/get-all-insights/route.ts`
@@ -102,20 +111,24 @@ const response = await ollama.chat({
 **Task:** Store insights in database and sort documents by comprehension score.
 
 **Steps:**
+
 1. **Update the schema** in `db/schema.ts`
+
 ```typescript
 export const insights = sqliteTable('insights', {
   documentId: text('documentId').primaryKey(),
   summary: text('summary').notNull(),
   // add your fields here
-});
+})
 ```
+
 2. **Generate and run the migration** `npm run db:generate && npm run db:migrate`
 3. **Update store-insights API** to store all generated insights (summary, comprehensionScore, isNonFiction). This API should be called after insights are generated in Part 1.
 4. **Update get-all-insights API** to return all insight fields
 5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents with lower comprehension scores first (documents that need better explanations)
 
 ### **Part 3: Architecture**
+
 How would you make this a production system?
 
 **(Freeform discussion)**
@@ -135,19 +148,21 @@ How would you make this a production system?
 ## Troubleshooting Ollama
 
 **If you see "Ollama is not running" error:**
+
 1. Make sure Ollama is installed: `ollama --version`
-2. Start Ollama service: `ollama serve`  
+2. Start Ollama service: `ollama serve`
 3. Pull a model: `ollama pull llama3.2:1b`
 4. Test Ollama: `ollama list` should show your downloaded models
 
 **Recommended models:**
+
 - `llama3.2:1b` - Fast and lightweight (recommended)
 - `llama3.2` (3B) - Larger model with better accuracy
 - `qwen2.5:3b` - Good alternative
 
-
-
 ## For Candidates Who Can't Run Ollama
+
 Interviewer:
+
 1. ngrok http http://localhost:11434
 2. Give candidate ngrok endpoint and set OLLAMA_HOST=ngrok_url in the .env file

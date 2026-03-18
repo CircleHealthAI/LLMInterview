@@ -86,8 +86,9 @@ npm run db:studio      # Database GUI
 **Requirements:**
 
 - Call Ollama API with document text using local model
-- Extract and return: summary, comprehensionScore, isNonFiction
-- Update the Document page to display the document alongside the AI generated insights. Use your judgement to make the UI useful and usable. Feel free to add whatever styling library you would like to use.
+- Extract and return: `summary`, `comprehensionScore` (0–100), `isNonFiction` (boolean), and `suggestedEdits` (array of 2–3 actionable suggestions to improve the document's clarity)
+- On the document detail page, display all four fields. `suggestedEdits` should render as a list where each suggestion can be individually marked as applied — track applied state with `useState`. Applied suggestions should look visually distinct from unapplied ones.
+- Use your judgement to make the UI useful and usable. Chakra UI is already installed.
 
 **Local API:** Uses Ollama running on `http://localhost:11434`
 
@@ -126,7 +127,7 @@ export const insights = sqliteTable('insights', {
 2. **Generate and run the migration** `npm run db:generate && npm run db:migrate`
 3. **Update store-insights API** to store all generated insights (summary, comprehensionScore, isNonFiction). This API should be called after insights are generated in Part 1.
 4. **Update get-all-insights API** to return all insight fields
-5. **Implement sorting** on the documents list on the home page (`app/page.tsx`) to show documents with lower comprehension scores first (documents that need better explanations)
+5. **Wire up the sort button** in `app/page.tsx` — the button and state are already scaffolded. Sort the documents list by comprehension score using the `sortAsc` state, toggling between ascending and descending.
 
 ### **Part 3: Architecture**
 

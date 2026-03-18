@@ -17,32 +17,15 @@ export async function POST(request: NextRequest) {
 
     const now = new Date()
 
-    const existing = await db
-      .selectFrom('insights')
-      .where('documentId', '=', documentId)
-      .selectAll()
-      .executeTakeFirst()
-
-    if (existing) {
-      await db
-        .updateTable('insights')
-        .set({
-          summary,
-          updatedAt: now.getTime(),
-        })
-        // BUG: missing .where('documentId', '=', documentId)
-        .execute()
-    } else {
-      await db
-        .insertInto('insights')
-        .values({
-          documentId,
-          summary,
-          createdAt: now.getTime(),
-          updatedAt: now.getTime(),
-        })
-        .execute()
-    }
+    await db
+      .insertInto('insights')
+      .values({
+        documentId,
+        summary,
+        createdAt: now.getTime(),
+        updatedAt: now.getTime(),
+      })
+      .execute()
 
     return NextResponse.json({
       success: true,

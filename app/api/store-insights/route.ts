@@ -17,31 +17,35 @@ export async function POST(request: NextRequest) {
 
     const now = new Date()
 
-    const result = await db
-      .insertInto('insights')
-      .values({
-        documentId,
-        summary,
-        createdAt: now.getTime(),
-        updatedAt: now.getTime(),
-      })
-      .onConflict((oc) =>
-        oc.column('documentId').doUpdateSet({
+    const existing = await db
+      .selectFrom('insights')
+      .where('documentId', '=', documentId)
+      .selectAll()
+      .executeTakeFirst()
+
+    if (existing) {
+      await db
+        .updateTable('insights')
+        .set({
           summary,
           updatedAt: now.getTime(),
         })
-      )
-      .returningAll()
-      .executeTakeFirstOrThrow()
+        // BUG: missing .where('documentId', '=', documentId)
+        .execute()
+    } else {
+      await db
+        .insertInto('insights')
+        .values({
+          documentId,
+          summary,
+          createdAt: now.getTime(),
+          updatedAt: now.getTime(),
+        })
+        .execute()
+    }
 
     return NextResponse.json({
       success: true,
-      insights: {
-        documentId: result.documentId,
-        summary: result.summary,
-        createdAt: new Date(result.createdAt).toISOString(),
-        updatedAt: new Date(result.updatedAt).toISOString(),
-      },
     })
   } catch (error) {
     console.error('Error storing insights:', error)

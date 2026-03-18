@@ -1,26 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { sampleDocuments, Document } from '@/lib/document'
-import { parseDocumentFile, generateDocumentId, saveDocument, getAllDocuments } from '@/lib/documentStorage'
+import { useEffect, useState } from 'react'
+import { useDocumentStore } from '@/lib/store'
+import { parseDocumentFile, generateDocumentId } from '@/lib/documentStorage'
+import { Document } from '@/lib/document'
 import Link from 'next/link'
 
 export default function Home() {
-  const [uploadedDocuments, setUploadedDocuments] = useState<Document[]>([])
+  const { documents, initialized, init, addDocument } = useDocumentStore()
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
 
-  // Load documents from localStorage on component mount
-  useEffect(() => {
-    const storedDocuments = getAllDocuments()
-    if (storedDocuments.length === 0) {
-      // If no documents in localStorage, add all sample documents
-      sampleDocuments.forEach(doc => saveDocument(doc))
-      setUploadedDocuments(sampleDocuments)
-    } else {
-      setUploadedDocuments(storedDocuments)
-    }
-  }, [])
+  useEffect(() => { init() }, [init])
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -30,26 +21,15 @@ export default function Home() {
     setUploadError(null)
 
     try {
-      // Parse the uploaded file using server-side API
       const { title, content } = await parseDocumentFile(file)
-      
-      // Create a new document object
       const newDocument: Document = {
         id: generateDocumentId(),
-        title: title,
-        content: content,
-        createdAt: new Date().toISOString()
+        title,
+        content,
+        createdAt: new Date().toISOString(),
       }
-      
-      // Save document to storage
-      saveDocument(newDocument)
-      
-      // Refresh documents list from storage
-      setUploadedDocuments(getAllDocuments())
-      
-      // Clear the file input
+      addDocument(newDocument)
       event.target.value = ''
-      
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Upload failed')
     } finally {
@@ -74,7 +54,6 @@ export default function Home() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Upload Document
           </h2>
-          
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
             <input
               type="file"
@@ -109,36 +88,42 @@ export default function Home() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Your Documents
           </h2>
-          
-          {uploadedDocuments.length === 0 ? (
+
+          {!initialized ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : documents.length === 0 ? (
             <p className="text-gray-500 text-center py-8">
               No documents uploaded yet. Upload your first document above!
             </p>
           ) : (
             <div className="space-y-4">
-              {uploadedDocuments.map((doc) => (
-                <div key={doc.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium text-gray-900">{doc.title}</h3>
-                      <p className="text-sm text-gray-500">
-                        Created: {new Date(doc.createdAt).toLocaleDateString()}
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {doc.content.length > 100 ? `${doc.content.substring(0, 100)}...` : doc.content}
-                      </p>
-                    </div>
-                    <div className="ml-4">
-                      <Link
-                        href={`/documents/${doc.id}`}
-                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors duration-200"
-                      >
-                        View Insights
-                      </Link>
+              {documents.map((doc) => {
+                return (
+                  <div
+                    key={doc.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium text-gray-900">{doc.title}</h3>
+                        <p className="text-sm text-gray-500">
+                          Created: {new Date(doc.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="ml-4">
+                        <Link
+                          href={`/documents/${doc.id}`}
+                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors duration-200"
+                        >
+                          View Insights
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>

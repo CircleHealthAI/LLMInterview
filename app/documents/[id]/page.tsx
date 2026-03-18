@@ -134,24 +134,9 @@ export default function DocumentPage({ params }: DocumentPageProps) {
               </Text>
             </Box>
           )}
-
+          {/* TODO: Display document content */}
           {/* TODO: Display insights once generated */}
-          {insights && (
-            <Box bg="white" rounded="lg" shadow="md" p={6}>
-              <Heading size="md" mb={4}>Insights</Heading>
-              <Stack gap={4}>
-                {/* TODO: Display summary */}
-
-                {/* TODO: Display comprehensionScore as a visual badge or progress bar */}
-
-                {/* TODO: Display isNonFiction as a label (e.g. "Fiction" or "Non-Fiction") */}
-
-                {/* TODO: Display suggestedEdits as a list where each item can be individually
-                    marked as applied. Track applied state locally with useState.
-                    Applied suggestions should look visually distinct from unapplied ones. */}
-              </Stack>
-            </Box>
-          )}
+          { insights && <Box>{JSON.stringify(insights)}</Box>}
         </Stack>
       </Container>
     </Box>

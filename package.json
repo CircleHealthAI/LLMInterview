@@ -12,7 +12,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:typegen": "kysely-codegen --dialect sqlite --url ./db/dev.db --out-file ./db/kysely-types.generated.ts --exclude-pattern \"__drizzle_*\""
   },
   "dependencies": {
     "@chakra-ui/react": "^3.34.0",
@@ -36,6 +37,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "eslint-config-prettier": "^10.1.8",
+    "kysely-codegen": "^0.20.0",
     "postcss": "^8.4.47",
     "prettier": "^3.8.1",
     "typescript": "^5"

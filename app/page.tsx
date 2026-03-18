@@ -4,16 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDocumentStore } from '@/lib/store'
 import { parseDocumentFile, generateDocumentId } from '@/lib/documentStorage'
 import { Document } from '@/lib/document'
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  HStack,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Button, Container, Heading, HStack, Spinner, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 
 export default function Home() {
@@ -21,7 +12,9 @@ export default function Home() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
 
-  useEffect(() => { init() }, [init])
+  useEffect(() => {
+    init()
+  }, [init])
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -48,26 +41,22 @@ export default function Home() {
   }
 
   return (
-    <Box minH="100vh" bg="gray.50" py={8}>
-      <Container maxW="4xl">
+    <Box minH="100vh" bg="gray.50" py={12}>
+      <Container maxW="3xl" mx="auto" px={6}>
         <Stack gap={8}>
-          <Box textAlign="center">
-            <Heading size="2xl" mb={2}>LLM Insights Viewer</Heading>
-            <Text color="gray.600">
+          <Stack gap={2} textAlign="center">
+            <Heading size="3xl">LLM Insights Viewer</Heading>
+            <Text color="gray.600" fontSize="lg">
               Full-Stack Interview Exercise: Upload and analyze documents
             </Text>
-          </Box>
+          </Stack>
 
           {/* File Upload */}
           <Box bg="white" rounded="lg" shadow="md" p={6}>
-            <Heading size="md" mb={4}>Upload Document</Heading>
-            <Box
-              border="2px dashed"
-              borderColor="gray.300"
-              rounded="lg"
-              p={6}
-              textAlign="center"
-            >
+            <Heading size="md" mb={4}>
+              Upload Document
+            </Heading>
+            <Box border="2px dashed" borderColor="gray.300" rounded="lg" p={6} textAlign="center">
               <input
                 type="file"
                 accept=".txt,.docx"
@@ -78,6 +67,7 @@ export default function Home() {
               />
               <label htmlFor="file-upload">
                 <Button
+                  padding={2}
                   as="span"
                   colorPalette="blue"
                   loading={isUploading}
@@ -94,14 +84,18 @@ export default function Home() {
 
             {uploadError && (
               <Box mt={4} bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={3}>
-                <Text color="red.800" fontSize="sm">{uploadError}</Text>
+                <Text color="red.800" fontSize="sm">
+                  {uploadError}
+                </Text>
               </Box>
             )}
           </Box>
 
           {/* Documents List */}
           <Box bg="white" rounded="lg" shadow="md" p={6}>
-            <Heading size="md" mb={4}>Your Documents</Heading>
+            <Heading size="md" mb={4}>
+              Your Documents
+            </Heading>
 
             {!initialized ? (
               <Box textAlign="center" py={8}>
@@ -133,7 +127,7 @@ export default function Home() {
                         </Stack>
                         <Box flexShrink={0}>
                           <Link href={`/documents/${doc.id}`}>
-                            <Button size="sm" colorPalette="blue" variant="subtle">
+                            <Button size="sm" colorPalette="blue" variant="subtle" padding={2}>
                               View Insights
                             </Button>
                           </Link>

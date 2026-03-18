@@ -3,15 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useDocumentStore } from '@/lib/store'
 import { InsightsResponse } from '@/app/api/insights/route'
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Button, Container, Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 
 interface DocumentPageProps {
@@ -26,7 +18,9 @@ export default function DocumentPage({ params }: DocumentPageProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => { init() }, [init])
+  useEffect(() => {
+    init()
+  }, [init])
 
   // undefined = still initializing, null = not found, Document = found
   const document = initialized ? (documents.find((d) => d.id === params.id) ?? null) : undefined
@@ -61,10 +55,12 @@ export default function DocumentPage({ params }: DocumentPageProps) {
 
   if (document === undefined) {
     return (
-      <Box minH="100vh" bg="gray.50" py={8}>
-        <Container maxW="4xl" textAlign="center">
+      <Box minH="100vh" bg="gray.50" py={12}>
+        <Container maxW="3xl" mx="auto" px={6} textAlign="center">
           <Spinner color="blue.600" size="xl" />
-          <Text mt={4} color="gray.600">Loading document...</Text>
+          <Text mt={4} color="gray.600">
+            Loading document...
+          </Text>
         </Container>
       </Box>
     )
@@ -72,10 +68,14 @@ export default function DocumentPage({ params }: DocumentPageProps) {
 
   if (document === null) {
     return (
-      <Box minH="100vh" bg="gray.50" py={8}>
-        <Container maxW="4xl" textAlign="center">
-          <Heading size="lg" color="red.600" mb={4}>Document Not Found</Heading>
-          <Text color="gray.600" mb={6}>No document with ID &quot;{params.id}&quot; exists.</Text>
+      <Box minH="100vh" bg="gray.50" py={12}>
+        <Container maxW="3xl" mx="auto" px={6} textAlign="center">
+          <Heading size="lg" color="red.600" mb={4}>
+            Document Not Found
+          </Heading>
+          <Text color="gray.600" mb={6}>
+            No document with ID &quot;{params.id}&quot; exists.
+          </Text>
           <Link href="/">
             <Button colorPalette="blue">← Back to Documents</Button>
           </Link>
@@ -85,21 +85,19 @@ export default function DocumentPage({ params }: DocumentPageProps) {
   }
 
   return (
-    <Box minH="100vh" bg="gray.50" py={8}>
-      <Container maxW="4xl">
+    <Box minH="100vh" bg="gray.50" py={12}>
+      <Container maxW="3xl" mx="auto" px={6}>
         <Stack gap={6}>
           {/* Header */}
-          <Box>
+          <Stack gap={2}>
             <Link href="/">
-              <Text color="blue.600" _hover={{ color: 'blue.800' }} mb={4} display="inline-block">
+              <Text color="blue.600" _hover={{ color: 'blue.800' }} display="inline-block">
                 ← Back to Documents
               </Text>
             </Link>
-            <Heading size="2xl" mb={2}>Document Analysis</Heading>
-            <Text color="gray.600">
-              View document content and generate AI-powered insights
-            </Text>
-          </Box>
+            <Heading size="2xl">Document Analysis</Heading>
+            <Text color="gray.600">View document content and generate AI-powered insights</Text>
+          </Stack>
 
           {/* Document Card */}
           <Box bg="white" rounded="lg" shadow="md" p={6}>
@@ -117,6 +115,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
                 colorPalette="blue"
                 onClick={getInsights}
                 loading={loading}
+                padding={2}
                 loadingText="Analyzing with AI..."
               >
                 Generate Insights
@@ -127,15 +126,17 @@ export default function DocumentPage({ params }: DocumentPageProps) {
           {/* Error */}
           {error && (
             <Box bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={4}>
-              <Text fontWeight="medium" color="red.800">Error</Text>
-              <Text fontSize="sm" color="red.800" mt={1}>{error}</Text>
+              <Text fontWeight="medium" color="red.800">
+                Error
+              </Text>
+              <Text fontSize="sm" color="red.800" mt={1}>
+                {error}
+              </Text>
             </Box>
           )}
 
           {/* TODO: Add insights display */}
-          <Box>
-            {JSON.stringify(insights)}
-          </Box>
+          <Box>{JSON.stringify(insights)}</Box>
         </Stack>
       </Container>
     </Box>

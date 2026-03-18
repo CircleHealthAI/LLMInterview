@@ -11,6 +11,8 @@ export default function Home() {
   const { documents, initialized, init, addDocument } = useDocumentStore()
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  // TODO: Use this state to implement ascending/descending sort by comprehension score
+  const [sortAsc, setSortAsc] = useState(true)
 
   useEffect(() => {
     init()
@@ -93,9 +95,13 @@ export default function Home() {
 
           {/* Documents List */}
           <Box bg="white" rounded="lg" shadow="md" p={6}>
-            <Heading size="md" mb={4}>
-              Your Documents
-            </Heading>
+            <HStack justify="space-between" mb={4}>
+              <Heading size="md">Your Documents</Heading>
+              {/* TODO: Wire this button up to sortAsc state and sort the documents list */}
+              <Button size="sm" variant="outline" onClick={() => setSortAsc(!sortAsc)}>
+                Score: {sortAsc ? 'Low → High' : 'High → Low'}
+              </Button>
+            </HStack>
 
             {!initialized ? (
               <Box textAlign="center" py={8}>

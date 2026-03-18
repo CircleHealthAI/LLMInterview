@@ -134,9 +134,9 @@ export default function DocumentPage({ params }: DocumentPageProps) {
               </Text>
             </Box>
           )}
-
-          {/* TODO: Add insights display */}
-          <Box>{JSON.stringify(insights)}</Box>
+          {/* TODO: Display document content */}
+          {/* TODO: Display insights once generated */}
+          { insights && <Box>{JSON.stringify(insights)}</Box>}
         </Stack>
       </Container>
     </Box>

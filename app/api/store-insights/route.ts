@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     const now = new Date()
 
-    const result = await db
+    await db
       .insertInto('insights')
       .values({
         documentId,
@@ -25,23 +25,10 @@ export async function POST(request: NextRequest) {
         createdAt: now.getTime(),
         updatedAt: now.getTime(),
       })
-      .onConflict((oc) =>
-        oc.column('documentId').doUpdateSet({
-          summary,
-          updatedAt: now.getTime(),
-        })
-      )
-      .returningAll()
-      .executeTakeFirstOrThrow()
+      .execute()
 
     return NextResponse.json({
       success: true,
-      insights: {
-        documentId: result.documentId,
-        summary: result.summary,
-        createdAt: new Date(result.createdAt).toISOString(),
-        updatedAt: new Date(result.updatedAt).toISOString(),
-      },
     })
   } catch (error) {
     console.error('Error storing insights:', error)

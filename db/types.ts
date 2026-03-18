@@ -5,14 +5,6 @@ import type { insights } from './schema'
 export type Insight = InferSelectModel<typeof insights>
 export type NewInsight = InferInsertModel<typeof insights>
 
-// Kysely Database interface — reflects raw SQLite column types as returned
-// by better-sqlite3. Timestamps are integers at the wire level; Drizzle's
-// mode:'timestamp' coercion only applies when querying via Drizzle ORM.
-export interface Database {
-  insights: {
-    documentId: string
-    summary: string
-    createdAt: number
-    updatedAt: number
-  }
-}
+// Kysely Database interface — generated from the live database via kysely-codegen.
+// Run `npm run db:typegen` after migrations to keep this in sync.
+export type { DB as Database } from './kysely-types.generated'

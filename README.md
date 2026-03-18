@@ -68,11 +68,12 @@ A Next.js 14 application for uploading documents and generating AI-powered insig
 ```bash
 npm run db:generate    # Generate migration files from schema changes
 npm run db:migrate     # Apply migrations to the database
+npm run db:typegen     # Regenerate Kysely types from the live database
 npm run db:push        # Push schema changes directly (dev only)
 npm run db:studio      # Database GUI
 ```
 
-**After updating the schema** in `db/schema.ts`, run `npm run db:generate` to create a new migration, then `npm run db:migrate` to apply it.
+**After updating the schema** in `db/schema.ts`, run `npm run db:generate` to create a new migration, then `npm run db:migrate` to apply it, and then `npm run db:typegen` to generate updated types.
 
 ## Implementation Instructions
 

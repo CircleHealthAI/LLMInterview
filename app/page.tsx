@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react'
 import { useDocumentStore } from '@/lib/store'
 import { parseDocumentFile, generateDocumentId } from '@/lib/documentStorage'
 import { Document } from '@/lib/document'
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import Link from 'next/link'
 
 export default function Home() {
@@ -38,96 +48,105 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            LLM Insights Viewer
-          </h1>
-          <p className="text-gray-600">
-            Full-Stack Interview Exercise: Upload and analyze documents
-          </p>
-        </div>
+    <Box minH="100vh" bg="gray.50" py={8}>
+      <Container maxW="4xl">
+        <Stack gap={8}>
+          <Box textAlign="center">
+            <Heading size="2xl" mb={2}>LLM Insights Viewer</Heading>
+            <Text color="gray.600">
+              Full-Stack Interview Exercise: Upload and analyze documents
+            </Text>
+          </Box>
 
-        {/* File Upload Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Upload Document
-          </h2>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <input
-              type="file"
-              accept=".txt,.docx"
-              onChange={handleFileUpload}
-              disabled={isUploading}
-              className="hidden"
-              id="file-upload"
-            />
-            <label
-              htmlFor="file-upload"
-              className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                isUploading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-              } transition-colors duration-200`}
+          {/* File Upload */}
+          <Box bg="white" rounded="lg" shadow="md" p={6}>
+            <Heading size="md" mb={4}>Upload Document</Heading>
+            <Box
+              border="2px dashed"
+              borderColor="gray.300"
+              rounded="lg"
+              p={6}
+              textAlign="center"
             >
-              {isUploading ? 'Uploading...' : 'Choose File'}
-            </label>
-            <p className="mt-2 text-sm text-gray-500">
-              Support for .txt and .docx files
-            </p>
-          </div>
+              <input
+                type="file"
+                accept=".txt,.docx"
+                onChange={handleFileUpload}
+                disabled={isUploading}
+                style={{ display: 'none' }}
+                id="file-upload"
+              />
+              <label htmlFor="file-upload">
+                <Button
+                  as="span"
+                  colorPalette="blue"
+                  loading={isUploading}
+                  loadingText="Uploading..."
+                  cursor="pointer"
+                >
+                  Choose File
+                </Button>
+              </label>
+              <Text mt={2} fontSize="sm" color="gray.500">
+                Supports .txt and .docx files
+              </Text>
+            </Box>
 
-          {uploadError && (
-            <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-3">
-              <div className="text-red-800 text-sm">{uploadError}</div>
-            </div>
-          )}
-        </div>
+            {uploadError && (
+              <Box mt={4} bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={3}>
+                <Text color="red.800" fontSize="sm">{uploadError}</Text>
+              </Box>
+            )}
+          </Box>
 
-        {/* Documents List */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Your Documents
-          </h2>
+          {/* Documents List */}
+          <Box bg="white" rounded="lg" shadow="md" p={6}>
+            <Heading size="md" mb={4}>Your Documents</Heading>
 
-          {!initialized ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            </div>
-          ) : documents.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              No documents uploaded yet. Upload your first document above!
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {documents.map((doc) => {
-                return (
-                  <div
-                    key={doc.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium text-gray-900">{doc.title}</h3>
-                        <p className="text-sm text-gray-500">
-                          Created: {new Date(doc.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="ml-4">
-                        <Link
-                          href={`/documents/${doc.id}`}
-                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors duration-200"
-                        >
-                          View Insights
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+            {!initialized ? (
+              <Box textAlign="center" py={8}>
+                <Spinner color="blue.600" />
+              </Box>
+            ) : documents.length === 0 ? (
+              <Text color="gray.500" textAlign="center" py={8}>
+                No documents uploaded yet. Upload your first document above!
+              </Text>
+            ) : (
+              <Stack gap={4}>
+                {documents.map((doc) => {
+                  return (
+                    <Box
+                      key={doc.id}
+                      border="1px solid"
+                      borderColor="gray.200"
+                      rounded="lg"
+                      p={4}
+                      _hover={{ bg: 'gray.50' }}
+                      transition="background 0.2s"
+                    >
+                      <HStack justify="space-between" align="start">
+                        <Stack gap={1}>
+                          <Text fontWeight="medium">{doc.title}</Text>
+                          <Text fontSize="sm" color="gray.500">
+                            Created: {new Date(doc.createdAt).toLocaleDateString()}
+                          </Text>
+                        </Stack>
+                        <Box flexShrink={0}>
+                          <Link href={`/documents/${doc.id}`}>
+                            <Button size="sm" colorPalette="blue" variant="subtle">
+                              View Insights
+                            </Button>
+                          </Link>
+                        </Box>
+                      </HStack>
+                    </Box>
+                  )
+                })}
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+      </Container>
+    </Box>
   )
 }

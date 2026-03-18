@@ -3,6 +3,15 @@
 import { useEffect, useState } from 'react'
 import { useDocumentStore } from '@/lib/store'
 import { InsightsResponse } from '@/app/api/insights/route'
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import Link from 'next/link'
 
 interface DocumentPageProps {
@@ -19,7 +28,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
 
   useEffect(() => { init() }, [init])
 
-  // undefined = still loading, null = not found, Document = found
+  // undefined = still initializing, null = not found, Document = found
   const document = initialized ? (documents.find((d) => d.id === params.id) ?? null) : undefined
 
   const getInsights = async () => {
@@ -50,98 +59,85 @@ export default function DocumentPage({ params }: DocumentPageProps) {
     }
   }
 
-  // Still initializing
   if (document === undefined) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading document...</p>
-          </div>
-        </div>
-      </div>
+      <Box minH="100vh" bg="gray.50" py={8}>
+        <Container maxW="4xl" textAlign="center">
+          <Spinner color="blue.600" size="xl" />
+          <Text mt={4} color="gray.600">Loading document...</Text>
+        </Container>
+      </Box>
     )
   }
 
-  // Initialized but not found
   if (document === null) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Document Not Found</h1>
-            <p className="text-gray-600 mb-6">No document with ID &quot;{params.id}&quot; exists.</p>
-            <Link
-              href="/"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
-            >
-              ← Back to Documents
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Box minH="100vh" bg="gray.50" py={8}>
+        <Container maxW="4xl" textAlign="center">
+          <Heading size="lg" color="red.600" mb={4}>Document Not Found</Heading>
+          <Text color="gray.600" mb={6}>No document with ID &quot;{params.id}&quot; exists.</Text>
+          <Link href="/">
+            <Button colorPalette="blue">← Back to Documents</Button>
+          </Link>
+        </Container>
+      </Box>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-6">
-          <Link
-            href="/"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
-          >
-            ← Back to Documents
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Document Analysis
-          </h1>
-          <p className="text-gray-600">
-            View document content and generate AI-powered insights
-          </p>
-        </div>
+    <Box minH="100vh" bg="gray.50" py={8}>
+      <Container maxW="4xl">
+        <Stack gap={6}>
+          {/* Header */}
+          <Box>
+            <Link href="/">
+              <Text color="blue.600" _hover={{ color: 'blue.800' }} mb={4} display="inline-block">
+                ← Back to Documents
+              </Text>
+            </Link>
+            <Heading size="2xl" mb={2}>Document Analysis</Heading>
+            <Text color="gray.600">
+              View document content and generate AI-powered insights
+            </Text>
+          </Box>
 
-        {/* Document Display */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              {document.title}
-            </h2>
-            <p className="text-sm text-gray-500">
-              Created: {new Date(document.createdAt).toLocaleDateString()}
-            </p>
-            <p className="text-sm text-gray-500">
-              Document ID: {document.id}
-            </p>
-          </div>
-          <div className="mt-6 pt-4 border-t">
-            <button
-              onClick={getInsights}
-              disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
-            >
-              {loading ? 'Analyzing with AI...' : 'Generate Insights'}
-            </button>
-          </div>
-        </div>
+          {/* Document Card */}
+          <Box bg="white" rounded="lg" shadow="md" p={6}>
+            <Stack gap={1} mb={4}>
+              <Heading size="lg">{document.title}</Heading>
+              <Text fontSize="sm" color="gray.500">
+                Created: {new Date(document.createdAt).toLocaleDateString()}
+              </Text>
+              <Text fontSize="sm" color="gray.500">
+                Document ID: {document.id}
+              </Text>
+            </Stack>
+            <Box pt={4} borderTop="1px solid" borderColor="gray.200">
+              <Button
+                colorPalette="blue"
+                onClick={getInsights}
+                loading={loading}
+                loadingText="Analyzing with AI..."
+              >
+                Generate Insights
+              </Button>
+            </Box>
+          </Box>
 
-        {/* Error Display */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <div className="text-red-800">
-              <h3 className="font-medium">Error</h3>
-              <p className="mt-1 text-sm">{error}</p>
-            </div>
-          </div>
-        )}
+          {/* Error */}
+          {error && (
+            <Box bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={4}>
+              <Text fontWeight="medium" color="red.800">Error</Text>
+              <Text fontSize="sm" color="red.800" mt={1}>{error}</Text>
+            </Box>
+          )}
 
-        {/* TODO: Add insights display */}
-        <div className="prose max-w-none">
-          {JSON.stringify(insights)}
-        </div>
-      </div>
-    </div>
+          {/* TODO: Add insights display */}
+          <Box>
+            {JSON.stringify(insights)}
+          </Box>
+        </Stack>
+      </Container>
+    </Box>
   )
 }

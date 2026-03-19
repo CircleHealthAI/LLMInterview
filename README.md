@@ -87,7 +87,7 @@ npm run db:studio      # Database GUI
 
 - Call Ollama API with document text using local model
 - Extract and return: `summary`, `comprehensionScore` (0–100), `isNonFiction` (boolean), and `suggestedEdits` (array of 2–3 actionable suggestions to improve the document's clarity)
-- On the document detail page, display all four fields. `suggestedEdits` should render as a list where each suggestion can be individually marked as applied — track applied state with `useState`. Applied suggestions should look visually distinct from unapplied ones.
+- On the document detail page, display all four fields. `suggestedEdits` should render as a list where each suggestion can be individually marked as applied. Applied suggestions should look visually distinct from unapplied ones.
 - Use your judgement to make the UI useful and usable. Chakra UI is already installed.
 
 **Local API:** Uses Ollama running on `http://localhost:11434`

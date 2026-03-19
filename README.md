@@ -125,7 +125,7 @@ export const insights = sqliteTable('insights', {
 ```
 
 2. **Generate and run the migration** `npm run db:generate && npm run db:migrate`
-3. **Update store-insights API** to store all generated insights (summary, comprehensionScore, isNonFiction, suggestedEdits). This API should be called after insights are generated in Part 1.
+3. **Store generated insights** (summary, comprehensionScore, isNonFiction, suggestedEdits). You may use the store-insights API to fulfill this (or as a reference).
 4. **Update get-all-insights API** to return all insight fields
 5. **Wire up the sort button** in `app/page.tsx` — the button and state are already scaffolded. Sort the documents list by comprehension score using the `sortAsc` state, toggling between ascending and descending.
 
